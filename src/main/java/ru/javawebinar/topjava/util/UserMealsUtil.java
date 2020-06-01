@@ -83,6 +83,7 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByStreamsOpt2(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 /*        return meals.stream()
                 .collect(Collectors.groupingBy(UserMeal::getDateTime,Collectors.toList()));*/
+        //Test GIT
         return null;
     }
 }
