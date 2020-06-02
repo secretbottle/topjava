@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -89,7 +91,7 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByStreamsOpt2(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumForDay = meals.stream().collect(Collectors.groupingBy(UserMeal::getLocalDate, Collectors.summingInt(UserMeal::getCalories)));
-        Map<LocalDate, AtomicBoolean> excessForDate = meals.stream().collect(Collectors.groupingBy(UserMeal::getLocalDate,));
+        Map<LocalDate, AtomicBoolean> excessForDate = meals.stream().collect(Collectors.groupingBy(UserMeal::getLocalDate));
 
         Collector<UserMeal, ?, Map<LocalDate, Integer>> allo = Collectors.groupingBy(UserMeal::getLocalDate, Collectors.summingInt(UserMeal::getCalories));
 
@@ -109,9 +111,8 @@ public class UserMealsUtil {
     private Collector<UserMeal, List<UserMealWithExcess>, List<UserMealWithExcess>> testM(Collector<UserMeal, ?, Map<LocalDate, Integer>> caloriesSumForDay,
                                                                              Collector<UserMeal, ?, Map<LocalDate, AtomicBoolean>> excessForDate,
                                                       BiFunction<UserMeal, Map<LocalDate, AtomicBoolean>, List<UserMealWithExcess>> uMealExProd ){
-        return Collector.of(
 
-        );
+        return null;
     }
 
 }
