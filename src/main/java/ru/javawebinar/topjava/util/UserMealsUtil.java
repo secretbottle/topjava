@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.util;
 
+import org.graalvm.compiler.lir.LIRInstruction;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
@@ -9,6 +10,9 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class UserMealsUtil {
@@ -30,6 +34,9 @@ public class UserMealsUtil {
         mealsTo.forEach(System.out::println);
         System.out.println("By cycles Optional 2");
         mealsTo = filteredByCyclesOpt2(meals, LocalTime.of(1, 0), LocalTime.of(23, 0), 2000);
+        mealsTo.forEach(System.out::println);
+        System.out.println("By stream Optional 2");
+        mealsTo = filteredByStreamsOpt2(meals, LocalTime.of(1, 0), LocalTime.of(23, 0), 2000);
         mealsTo.forEach(System.out::println);
     }
 
@@ -81,9 +88,30 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByStreamsOpt2(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-/*        return meals.stream()
-                .collect(Collectors.groupingBy(UserMeal::getDateTime,Collectors.toList()));*/
-        //Test GIT
-        return null;
+        Map<LocalDate, Integer> caloriesSumForDay = meals.stream().collect(Collectors.groupingBy(UserMeal::getLocalDate, Collectors.summingInt(UserMeal::getCalories)));
+        Map<LocalDate, AtomicBoolean> excessForDate = meals.stream().collect(Collectors.groupingBy(UserMeal::getLocalDate,));
+
+        Collector<UserMeal, ?, Map<LocalDate, Integer>> allo = Collectors.groupingBy(UserMeal::getLocalDate, Collectors.summingInt(UserMeal::getCalories));
+
+        Collector<UserMeal, List<UserMealWithExcess>, List<UserMealWithExcess>> filterTo = Collector.of(
+                ArrayList::new,
+                (excesses, meal) -> {
+                    if (TimeUtil.isBetweenHalfOpen(meal.getLocalTime(), startTime, endTime)) {
+                        excesses.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), true));
+                    }
+                },
+                (x, y) -> x
+        );
+        return meals.stream()
+                .collect(filterTo);
     }
+
+    private Collector<UserMeal, List<UserMealWithExcess>, List<UserMealWithExcess>> testM(Collector<UserMeal, ?, Map<LocalDate, Integer>> caloriesSumForDay,
+                                                                             Collector<UserMeal, ?, Map<LocalDate, AtomicBoolean>> excessForDate,
+                                                      BiFunction<UserMeal, Map<LocalDate, AtomicBoolean>, List<UserMealWithExcess>> uMealExProd ){
+        return Collector.of(
+
+        );
+    }
+
 }
