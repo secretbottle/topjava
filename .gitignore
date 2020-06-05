@@ -6,3 +6,4 @@ log
 *.patch
 /patches/
 /lib/
+/log/
