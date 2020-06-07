@@ -1,0 +1,13 @@
+tr[mealExcess="true"] {
+    color: red;
+}
+
+tr[mealExcess="false"] {
+    color: green;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}

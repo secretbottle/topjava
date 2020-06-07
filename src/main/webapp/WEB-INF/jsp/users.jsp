@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="ru">
 <head>
+    <link rel="stylesheet" href="css/style.css">
     <title>Users</title>
 </head>
 <body>
