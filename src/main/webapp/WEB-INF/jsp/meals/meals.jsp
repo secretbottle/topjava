@@ -16,19 +16,19 @@
         <th>Каллории</th>
     </tr>
     <jsp:useBean id="meals" scope="request" type="java.util.List"/>
-    <c:forEach items="${meals}" var="meal">
-        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
-        <tr mealExcess="${meal.excess}">
-            <td>${meal.localDate} ${meal.localTime}</td>
-            <td>${meal.description}</td>
-            <td>${meal.calories}</td>
-            <td><a href="meals?id=${meal.id}&action=edit">Edit</a></td>
-            <td><a href="meals?id=${meal.id}&action=delete">Delete</a></td>
-        </tr>
-        <tr>
-            <td><a href="meals?action=add">Создать</a></td>
+    <c:forEach items="${meals}" var="mealTo">
+        <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
+        <tr mealExcess="${mealTo.excess}">
+            <td>${mealTo.localDate} ${mealTo.localTime}</td>
+            <td>${mealTo.description}</td>
+            <td>${mealTo.calories}</td>
+            <td><a href="meals?id=${mealTo.id}&action=edit">Edit</a></td>
+            <td><a href="meals?id=${mealTo.id}&action=delete">Delete</a></td>
         </tr>
     </c:forEach>
+    <tr>
+        <td><a href="meals?action=add">Создать</a></td>
+    </tr>
 </table>
 
 </body>

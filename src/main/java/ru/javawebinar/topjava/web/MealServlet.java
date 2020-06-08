@@ -30,47 +30,55 @@ public class MealServlet extends HttpServlet {
         int call = Integer.parseInt(request.getParameter("calories"));
         Meal meal;
 
-        if (id.equals("")) {
+        if (id.equals("-1")) {
             meal = new Meal(mealsStorage.getCount(), dateTime, desc, call);
             mealsStorage.save(meal);
         } else {
-            meal = new Meal(new AtomicInteger(Integer.parseInt(id)), dateTime, desc, call);
+            meal = new Meal(Integer.parseInt(id), dateTime, desc, call);
             mealsStorage.update(meal);
         }
         response.sendRedirect("meals");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("AAAAAAAAAAAAAAAAAAAAAAAAAA");
+        log.debug(mealsStorage.getMeals().toString());
+        log.debug(mealsStorage.getMeals().keySet().toString());
+        log.debug(String.valueOf(mealsStorage.getCount()));
+
         String action = request.getParameter("action");
-        AtomicInteger id =  new AtomicInteger(Integer.parseInt(request.getParameter("id")));
+        String id = request.getParameter("id");
+        if(action==null){
+            request.setAttribute("meals", getMealsTo());
+            request.getRequestDispatcher("/WEB-INF/jsp/meals/meals.jsp").forward(request, response);
+            return;
+        }
 
 
         Meal meal;
-
         switch (action) {
             case "add":
-                meal = new Meal(mealsStorage.getCount(), LocalDateTime.MIN,"", 0);
+                meal = new Meal(-1, LocalDateTime.MIN,"", 0);
                 request.setAttribute("meal", meal);
                 break;
             case "delete":
-                mealsStorage.delete(id);
+                mealsStorage.delete(Integer.parseInt(id));
                 response.sendRedirect("meals");
-                break;
+                return;
 
             case "view":
             case "edit":
-                meal = mealsStorage.get(id);
+                meal = mealsStorage.get(Integer.parseInt(id));
                 request.setAttribute("meal", meal);
                 break;
             default:
-                request.setAttribute("meals", getMealsTo());
-                request.getRequestDispatcher("/WEB-INF/jsp/meals/meals.jsp").forward(request, response);
+/*                request.setAttribute("meals", getMealsTo());
+                request.getRequestDispatcher("/WEB-INF/jsp/meals/meals.jsp").forward(request, response);*/
                 break;
         }
 
         //request.setAttribute("meal", meal);
-        request.getRequestDispatcher(action.equals("view")? "/WEB-INF/jsp/meals/viewMeal.jsp" :"/WEB-INF/jsp/meals/editMeal.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher(action.equals("view")? "/WEB-INF/jsp/meals/viewMeal.jsp" :"/WEB-INF/jsp/meals/editMeal.jsp").forward(request, response);
 
     }
 
