@@ -3,15 +3,12 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Meal {
+    public static final Meal EMPTY = new Meal(-1, LocalDateTime.MIN,"", 0);
     private final int id;
-
     private final LocalDateTime dateTime;
-
     private final String description;
-
     private final int calories;
 
     public Meal(int id, LocalDateTime dateTime, String description, int calories) {

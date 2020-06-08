@@ -1,6 +1,6 @@
 tr[mealExcess="true"] {
-    color: red;
-}
+     color: red;
+ }
 
 tr[mealExcess="false"] {
     color: green;

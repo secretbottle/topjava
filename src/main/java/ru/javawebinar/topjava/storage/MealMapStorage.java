@@ -38,11 +38,11 @@ public class MealMapStorage implements Storage<Meal, Integer> {
         return new ArrayList<>(meals.values());
     }
 
-    public ConcurrentMap<Integer, Meal> getMeals(){
+    public ConcurrentMap<Integer, Meal> getMeals() {
         return meals;
     }
 
-    public int getCount(){
+    public int getCount() {
         return counter.get();
     }
 }

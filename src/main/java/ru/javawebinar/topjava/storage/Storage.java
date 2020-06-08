@@ -2,7 +2,7 @@ package ru.javawebinar.topjava.storage;
 
 import java.util.List;
 
-public interface Storage<E,K> {
+public interface Storage<E, K> {
     void save(E t);
 
     void delete(K k);

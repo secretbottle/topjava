@@ -6,7 +6,7 @@
     <title>Приём пищи #${meal.id}</title>
 </head>
 <body>
-<h3>Дата и время приёма: ${meal.dateTime}</h3>
+<h3>Дата и время приёма: ${meal.date} ${meal.time}</h3>
 <h3>Описание: ${meal.description}</h3>
 <h3>Количество каллорий: ${meal.calories}</h3>
 <button onclick="window.history.back()">Назад</button>
