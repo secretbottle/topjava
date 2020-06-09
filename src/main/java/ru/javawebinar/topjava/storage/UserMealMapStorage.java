@@ -4,17 +4,18 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MealMapStorage implements Storage<Meal, Integer> {
-    private ConcurrentMap<Integer, Meal> meals = new ConcurrentHashMap<>();
+public class UserMealMapStorage implements Storage<Meal, Integer> {
+    private Map<Integer, Meal> meals = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     @Override
-    public void save(Meal meal) {
-        meals.put(counter.getAndIncrement(), meal);
+    public Meal create(Meal meal) {
+        return meals.put(counter.getAndIncrement(), meal);
     }
 
     @Override
@@ -24,8 +25,8 @@ public class MealMapStorage implements Storage<Meal, Integer> {
     }
 
     @Override
-    public void update(Meal meal) {
-        meals.replace(meal.getId(), meal);
+    public Meal update(Meal meal) {
+        return meals.replace(meal.getId(), meal);
     }
 
     @Override
@@ -36,10 +37,6 @@ public class MealMapStorage implements Storage<Meal, Integer> {
     @Override
     public List<Meal> getAll() {
         return new ArrayList<>(meals.values());
-    }
-
-    public ConcurrentMap<Integer, Meal> getMeals() {
-        return meals;
     }
 
     public int getCount() {

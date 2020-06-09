@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.storage.MealMapStorage;
+import ru.javawebinar.topjava.storage.UserMealMapStorage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private final MealMapStorage mealsStorage = new MealMapStorage();
+    private final UserMealMapStorage mealsStorage = new UserMealMapStorage();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -31,7 +31,7 @@ public class MealServlet extends HttpServlet {
 
         if (id.equals("-1")) {
             meal = new Meal(mealsStorage.getCount(), dateTime, desc, call);
-            mealsStorage.save(meal);
+            mealsStorage.create(meal);
         } else {
             meal = new Meal(Integer.parseInt(id), dateTime, desc, call);
             mealsStorage.update(meal);
@@ -52,7 +52,7 @@ public class MealServlet extends HttpServlet {
         Meal meal;
         switch (action) {
             case "add":
-                meal = Meal.EMPTY;
+                meal = MealsUtil.EMPTY;
                 request.setAttribute("meal", meal);
                 break;
             case "view":
