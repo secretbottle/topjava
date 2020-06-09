@@ -11,7 +11,6 @@
 <h2>Meals</h2>
 <table>
     <tr>
-        <th></th>
         <th>Дата/Время</th>
         <th>Описание</th>
         <th>Каллории</th>
@@ -20,7 +19,6 @@
     <c:forEach items="${meals}" var="mealTo">
         <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr mealExcess="${mealTo.excess}">
-            <td><a href="meals?id=${mealTo.id}&action=view">View</a></td>
             <td>${mealTo.localDate} ${mealTo.localTime}</td>
             <td>${mealTo.description}</td>
             <td>${mealTo.calories}</td>

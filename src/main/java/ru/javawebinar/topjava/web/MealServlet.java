@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
+import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.storage.UserMealMapStorage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -15,11 +15,16 @@ import java.io.IOException;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private final UserMealMapStorage mealsStorage = new UserMealMapStorage();
+    private Storage mealsStorage;
+
+    @Override
+    public void init() {
+        mealsStorage = new UserMealMapStorage();
+        MealsUtil.DEMO_MEALS.forEach(mealsStorage::create);
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -30,7 +35,7 @@ public class MealServlet extends HttpServlet {
         Meal meal;
 
         if (id.equals("-1")) {
-            meal = new Meal(mealsStorage.getCount(), dateTime, desc, call);
+            meal = new Meal(dateTime, desc, call);
             mealsStorage.create(meal);
         } else {
             meal = new Meal(Integer.parseInt(id), dateTime, desc, call);
@@ -42,13 +47,10 @@ public class MealServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        String id = request.getParameter("id");
-        if (action == null) {
-            request.setAttribute("meals", getMealsTo());
-            request.getRequestDispatcher("/WEB-INF/jsp/meals/meals.jsp").forward(request, response);
-            return;
-        }
+        if (action == null)
+            action = "";
 
+        String id = request.getParameter("id");
         Meal meal;
         switch (action) {
             case "add":
@@ -64,13 +66,13 @@ public class MealServlet extends HttpServlet {
                 mealsStorage.delete(Integer.parseInt(id));
                 response.sendRedirect("meals");
                 return;
+            default:
+                request.setAttribute("meals", MealsUtil.filteredByStreams(mealsStorage.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
+                request.getRequestDispatcher("/WEB-INF/jsp/meals/meals.jsp").forward(request, response);
+                return;
         }
 
-        request.getRequestDispatcher(action.equals("view") ? "/WEB-INF/jsp/meals/viewMeal.jsp" : "/WEB-INF/jsp/meals/editMeal.jsp").forward(request, response);
-    }
-
-    private List<MealTo> getMealsTo() {
-        return MealsUtil.filteredByStreams(mealsStorage.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
+        request.getRequestDispatcher("/WEB-INF/jsp/meals/editMeal.jsp").forward(request, response);
     }
 
 }

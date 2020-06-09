@@ -1,15 +1,17 @@
 package ru.javawebinar.topjava.storage;
 
+import ru.javawebinar.topjava.model.Meal;
+
 import java.util.List;
 
-public interface Storage<E, K> {
-    E create(E t);
+public interface Storage {
+    Meal create(Meal meal);
 
-    void delete(K k);
+    void delete(int i);
 
-    E update(E t);
+    Meal update(Meal meal);
 
-    E get(K k);
+    Meal get(int i);
 
-    List<E> getAll();
+    List<Meal> getAll();
 }
