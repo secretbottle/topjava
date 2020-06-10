@@ -9,14 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class UserMealMapStorage implements Storage {
+public class MealStorage implements Storage {
     private Map<Integer, Meal> meals = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public Meal create(Meal meal) {
-        meal.getId().set((counter.getAndIncrement()));
-        return meals.put(meal.getIdToInt(), meal);
+        meal.setId((counter.getAndIncrement()));
+        meals.put(meal.getId(), meal);
+        return meal;
     }
 
     @Override
@@ -26,7 +27,8 @@ public class UserMealMapStorage implements Storage {
 
     @Override
     public Meal update(Meal meal) {
-        return meals.replace(meal.getIdToInt(), meal);
+        meals.replace(meal.getId(), meal);
+        return meal;
     }
 
     @Override

@@ -7,11 +7,11 @@ import java.util.List;
 public interface Storage {
     Meal create(Meal meal);
 
-    void delete(int i);
+    void delete(int id);
 
     Meal update(Meal meal);
 
-    Meal get(int i);
+    Meal get(int id);
 
     List<Meal> getAll();
 }

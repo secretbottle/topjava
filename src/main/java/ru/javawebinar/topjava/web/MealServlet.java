@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.storage.Storage;
-import ru.javawebinar.topjava.storage.UserMealMapStorage;
+import ru.javawebinar.topjava.storage.MealStorage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init() {
-        mealsStorage = new UserMealMapStorage();
+        mealsStorage = new MealStorage();
         MealsUtil.DEMO_MEALS.forEach(mealsStorage::create);
     }
 
@@ -30,15 +30,15 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
-        String desc = request.getParameter("description");
-        int call = Integer.parseInt(request.getParameter("calories"));
+        String description = request.getParameter("description");
+        int calories = Integer.parseInt(request.getParameter("calories"));
         Meal meal;
 
         if (id.equals("-1")) {
-            meal = new Meal(dateTime, desc, call);
+            meal = new Meal(dateTime, description, calories);
             mealsStorage.create(meal);
         } else {
-            meal = new Meal(Integer.parseInt(id), dateTime, desc, call);
+            meal = new Meal(Integer.parseInt(id), dateTime, description, calories);
             mealsStorage.update(meal);
         }
 
