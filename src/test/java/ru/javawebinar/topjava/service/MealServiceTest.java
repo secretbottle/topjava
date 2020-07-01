@@ -38,30 +38,25 @@ public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
     private static final Map<String, Long> resultLogs = new HashMap<>();
 
-    private static void logInfo(Description description, long nanos) {
-        String testName = description.getMethodName();
-        long testTime = TimeUnit.NANOSECONDS.toMillis(nanos);
-        resultLogs.put(testName, testTime);
-        log.info(String.format("Test %s %s, spent %d ms",
-                testName, "finished", testTime));
-    }
-
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            logInfo(description, nanos);
+            String testName = description.getMethodName();
+            long testTime = TimeUnit.NANOSECONDS.toMillis(nanos);
+            resultLogs.put(testName, testTime);
+            log.info(String.format("\u001B[34m Test %s finished, spent %d ms\u001B[0m", testName, testTime));
         }
     };
 
-    @AfterClass
-    public static void after() {
-        String resultToString = resultLogs.entrySet().stream().map(m -> m.getKey() + " - " + m.getValue() + " ms").collect(Collectors.joining("\n"));
-        log.info("Time for each test:\n" + resultToString);
-    }
-
     @Autowired
     private MealService service;
+
+    @AfterClass
+    public static void afterClass() {
+        String resultToString = resultLogs.entrySet().stream().map(m -> String.format("%-50s %d ms", m.getKey(), m.getValue())).collect(Collectors.joining("\n"));
+        log.info("\n\u001B[32mSpent time for each test:\n" + resultToString + "\u001B[0m");
+    }
 
     @Test
     public void delete() throws Exception {

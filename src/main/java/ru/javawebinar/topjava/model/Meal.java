@@ -40,14 +40,14 @@ public class Meal extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
     }
 
     public Meal(Meal m) {
-        this(m.getId(),m.getDateTime(),m.getDescription(),m.getCalories());
+        this(m.getId(), m.getDateTime(), m.getDescription(), m.getCalories());
     }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
