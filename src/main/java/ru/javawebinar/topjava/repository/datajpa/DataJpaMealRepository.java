@@ -25,7 +25,7 @@ public class DataJpaMealRepository implements MealRepository {
     @Transactional
     //https://stackoverflow.com/questions/45831695/alternatives-to-getreference-method-in-spring-data-jpa
     public Meal save(Meal meal, int userId) {
-        if (!meal.isNew() && get(meal.id(), userId) == null ) {
+        if (!meal.isNew() && get(meal.id(), userId) == null) {
             return null;
         }
         meal.setUser(crudUserRepository.getOne(userId));
@@ -39,8 +39,7 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        Meal meal = crudMealRepository.findById(id).orElse(null);
-        return meal != null && meal.getUser().getId() == userId ? meal : null;
+        return crudMealRepository.findById(id).filter(m -> m.getUser().getId() == userId).orElse(null);
     }
 
     @Override
