@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
@@ -24,9 +23,8 @@ public class JspMealController extends AbstractMealController {
         return "/meals";
     }
 
-    @PostMapping("mealForm")
-    protected String doPost(HttpServletRequest request) throws IOException {
-        request.setCharacterEncoding("UTF-8");
+    @PostMapping("/mealForm")
+    protected String save(HttpServletRequest request) throws IOException {
         String paramId = request.getParameter("id");
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
@@ -36,17 +34,16 @@ public class JspMealController extends AbstractMealController {
         if (StringUtils.isEmpty(paramId)) {
             super.create(meal);
         } else {
-            Objects.requireNonNull(paramId);
             super.update(meal, Integer.parseInt(paramId));
         }
         return "redirect:/meals";
     }
 
-    @GetMapping("update/{id}")
+    @GetMapping("/update/{id}")
     public String update(@PathVariable int id, HttpServletRequest request) {
         final Meal meal = super.get(id);
         request.setAttribute("meal", meal);
-        return "/mealForm";
+        return "mealForm";
     }
 
     @GetMapping("delete/{id}")
@@ -55,11 +52,11 @@ public class JspMealController extends AbstractMealController {
         return "redirect:/meals";
     }
 
-    @GetMapping("create")
+    @GetMapping("/create")
     public String create(HttpServletRequest request) {
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
-        return "/mealForm";
+        return "mealForm";
     }
 
     @GetMapping("filter")
@@ -68,7 +65,7 @@ public class JspMealController extends AbstractMealController {
                          @RequestParam("endDate") String endDate, @RequestParam("endTime") String endTime) {
         request.setAttribute("meals", super.getBetween(parseLocalDate(startDate), parseLocalTime(startTime),
                 parseLocalDate(endDate), parseLocalTime(endTime)));
-        return "/meals";
+        return "meals";
     }
 
 }
