@@ -40,12 +40,21 @@ $(function () {
     );
 });
 
-function enableUser(id) {
+function activeStatus(id) {
+    let enabled = $(":checkbox#" + id).prop("checked");
     $.ajax({
         type: "POST",
         url: context.ajaxUrl + id,
-        data: "enabled=" + $(":checkbox#" + id).prop("checked"),
-        success: successNoty("Change success"),
-        error: failNoty("Change failed")
+        data: "enabled=" + enabled,
+        success: function (){
+            successNoty("Change success")
+            $(":checkbox#" + id).prop("checked", enabled)
+            $("#userRow" + id).attr("enabled", enabled)
+        },
+        fail: function (jqXHR) {
+            failNoty(jqXHR);
+            $(":checkbox#" + id).prop("checked", !enabled)
+            $("#userRow" + id).attr("enabled", !enabled)
+        }
     })
 }

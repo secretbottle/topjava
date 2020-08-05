@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -55,8 +56,11 @@ public class UserService {
     public User getWithMeals(int id) {
         return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
-    //TODO WORKING ON ENABLE STATUS
-    public boolean checked(int id, boolean checked){
-        return checkNotFoundWithId();
+
+    @Transactional
+    @CacheEvict(value = "users", allEntries = true)
+    public void activate(int id, boolean checked){
+        get(id).setEnabled(checked);
+
     }
 }
