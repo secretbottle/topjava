@@ -1,4 +1,3 @@
-// $(document).ready(function () {
 $(function () {
     makeEditable({
             ajaxUrl: "profile/meals/",
@@ -34,3 +33,20 @@ $(function () {
         }
     );
 });
+
+function filter() {
+    $.ajax({
+        type: "GET",
+        url: context.ajaxUrl + "filter",
+        data: "startDate=" + $("#startDate").val() + "&endDate=" + $("#endDate").val()
+            + "&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val()
+    }).done(function (data) {
+        context.datatableApi.clear().rows.add(data).draw();
+        successNoty("Filtered");
+    });
+}
+
+function resetFilter() {
+    $("#filter")[0].reset();
+    filter();
+}

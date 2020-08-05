@@ -14,26 +14,39 @@
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
 
-        <form method="get" action="meals/filter">
-            <dl>
-                <dt><spring:message code="meal.startDate"/>:</dt>
-                <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endDate"/>:</dt>
-                <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.startTime"/>:</dt>
-                <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endTime"/>:</dt>
-                <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-            </dl>
-            <button type="submit" ><spring:message code="meal.filter"/></button>
+        <form id="filter">
+            <div class="form-group">
+                <label for="startDate" class="col-form-label"><spring:message code="meal.startDate"/>:</label>
+                <input type="date" id="startDate" value="${param.startDate}">
+            </div>
+
+            <div class="form-group">
+                <label for="endDate" class="col-form-label"><spring:message code="meal.endDate"/>:</label>
+                <input type="date" id="endDate" value="${param.endDate}">
+            </div>
+
+            <div class="form-group">
+                <label for="startTime" class="col-form-label"><spring:message code="meal.startTime"/>:</label>
+                <input type="time" id="startTime" value="${param.startTime}">
+            </div>
+
+            <div class="form-group">
+                <label for="endTime" class="col-form-label"><spring:message code="meal.endTime"/>:</label>
+                <input type="time" id="endTime" value="${param.endTime}">
+            </div>
         </form>
 
+        <button class="btn btn-primary" onclick="filter()">
+            <span class="fa fa-filter"></span>
+            <spring:message code="meal.filter"/>
+        </button>
+
+        <button class="btn btn-warning" onclick="resetFilter()">
+            <span class="fa"></span>
+            <spring:message code="meal.reset"/>
+        </button>
+
+        <hr>
         <button class="btn btn-primary" onclick="add()">
             <span class="fa fa-plus"></span>
             <spring:message code="meal.add"/>
