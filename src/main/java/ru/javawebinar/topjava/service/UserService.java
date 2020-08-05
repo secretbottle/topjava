@@ -55,4 +55,8 @@ public class UserService {
     public User getWithMeals(int id) {
         return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
+    //TODO WORKING ON ENABLE STATUS
+    public boolean checked(int id, boolean checked){
+        return checkNotFoundWithId();
+    }
 }

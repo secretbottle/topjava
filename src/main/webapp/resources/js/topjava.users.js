@@ -1,4 +1,3 @@
-// $(document).ready(function () {
 $(function () {
     makeEditable({
             ajaxUrl: "admin/users/",
@@ -40,3 +39,13 @@ $(function () {
         }
     );
 });
+
+function enableUser(id) {
+    $.ajax({
+        type: "POST",
+        url: context.ajaxUrl + id,
+        data: "enabled=" + $(":checkbox#" + id).prop("checked"),
+        success: successNoty("Change success"),
+        error: failNoty("Change failed")
+    })
+}

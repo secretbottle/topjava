@@ -48,4 +48,10 @@ public abstract class AbstractUserController {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
     }
+
+    //TODO WORKING ON ENABLE STATUS
+    public boolean checked(int id, boolean checked) {
+        log.info("User with id {} checked {}", id, checked);
+        return service.checked(id, checked);
+    }
 }
